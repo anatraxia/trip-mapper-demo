@@ -5,7 +5,7 @@ class TripsController < ApplicationController
   # GET /trips
   # GET /trips.json
   def index
-    @trips = Trip.all
+    @trips = Trip.where(user_id:current_user.id)
     @hash = Gmaps4rails.build_markers(@trips) do |trip, marker|
       marker.lat trip.latitude
       marker.lng trip.longitude
@@ -30,6 +30,7 @@ class TripsController < ApplicationController
   # POST /trips.json
   def create
     @trip = Trip.new(trip_params)
+    @trip.user_id = current_user.id
 
     respond_to do |format|
       if @trip.save
